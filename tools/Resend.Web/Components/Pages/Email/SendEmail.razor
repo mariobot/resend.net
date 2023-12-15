@@ -1,0 +1,33 @@
+﻿@page "/email/sendemail"
+
+@inject IResend resendClient
+
+@attribute [RenderModeInteractiveServer(false)]
+
+<h3>SendEmail</h3>
+
+<FluentButton OnClick="SendEmailByAPI" Appearance="Appearance.Accent">
+    Send Test Email
+</FluentButton>
+
+<h3>@guidResult</h3>
+
+@code {
+
+    public Guid guidResult { get; set; }
+
+    public async Task SendEmailByAPI()
+    {
+        var msg = new EmailMessage()
+            {
+                From = "onboarding@resend.dev",
+                To = "mariobot113@hotmail.com",
+                Subject = "Tst mail",
+                HtmlBody = "<div><strong>Greetings<strong> 👋🏻 from .NET</div>"
+            };
+
+        var result = await resendClient.EmailSendAsync(msg);
+
+        guidResult = result.Content;
+    }
+}
