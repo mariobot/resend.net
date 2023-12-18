@@ -1,6 +1,7 @@
 ﻿@page "/email/sendemail"
 
 @inject IResend resendClient
+@inject NavigationManager navigationManager
 
 @attribute [RenderModeInteractiveServer(false)]
 
@@ -10,11 +11,14 @@
     Send Test Email
 </FluentButton>
 
-<h3>@guidResult</h3>
+<FluentButton @onclick="navToInfo" Disabled="disableLinkButton" Id="btnDetails" >
+    Get Email Info 
+</FluentButton>
 
 @code {
 
     public Guid guidResult { get; set; }
+    public bool disableLinkButton { get; set; } = true;
 
     public async Task SendEmailByAPI()
     {
@@ -26,8 +30,15 @@
                 HtmlBody = "<div><strong>Greetings<strong> 👋🏻 from .NET</div>"
             };
 
-        var result = await resendClient.EmailSendAsync(msg);
+        var result = await resendClient.EmailSendAsync(msg);        
 
         guidResult = result.Content;
+
+        disableLinkButton = false;
+    }
+
+    public void navToInfo()
+    {
+        navigationManager.NavigateTo($"/Email/checkemail/{guidResult}");
     }
 }

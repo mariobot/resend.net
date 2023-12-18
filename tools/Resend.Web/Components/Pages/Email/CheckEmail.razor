@@ -1,0 +1,50 @@
+﻿@page "/Email/checkemail/{guidEmail:guid}"
+@inject IResend resendClient
+
+@attribute [RenderModeInteractiveServer(false)]
+
+<h3>CheckEmail</h3>
+
+@if (emailReceipt is not null)
+{
+    <FluentLabel>
+        @emailReceipt.From
+    </FluentLabel>
+
+    <FluentLabel>
+        @emailReceipt.To
+    </FluentLabel>
+
+    <FluentLabel>
+        @emailReceipt.Subject
+    </FluentLabel>
+
+    <FluentLabel>
+        @emailReceipt.TextBody
+    </FluentLabel>
+
+    <FluentLabel>
+        @emailReceipt.MomentCreated
+    </FluentLabel>
+}
+
+
+@code {
+    [Parameter]
+    public Guid? guidEmail { get; set; }
+
+    public EmailReceipt? emailReceipt { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (guidEmail is not null)
+        {
+            var response = await resendClient.EmailRetrieveAsync(guidEmail.GetValueOrDefault());
+
+            if (response.Success)
+            {
+                emailReceipt = response.Content;
+            }
+        }
+    }
+}
