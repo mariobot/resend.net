@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cicd", "cicd", "{C05A73FD-2
 		cicd\release.sh = cicd\release.sh
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Resend.Web", "tools\Resend.Web\Resend.Web.csproj", "{2F7033A0-C1FC-4749-BBFD-F20765EA7091}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Resend.Web", "tools\Resend.Web\Resend.Web.csproj", "{2F7033A0-C1FC-4749-BBFD-F20765EA7091}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
