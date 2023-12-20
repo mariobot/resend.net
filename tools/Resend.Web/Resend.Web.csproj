@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\Domains\" />
     <Folder Include="Components\Pages\ApiKeys\" />
   </ItemGroup>
 
