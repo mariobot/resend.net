@@ -1,0 +1,51 @@
+﻿@page "/Domains/adddomain"
+
+@attribute [RenderModeInteractiveServer(false)]
+
+@inject IResend resendClient
+
+<h3>AddDomain</h3>
+
+
+<FluentSelect Items=@regions
+    TOption="Option<string>"
+    Multiple=true
+    OptionText="@(i => i.Text)"
+    OptionValue="@(i => i.Value)"
+    OptionSelected="@(i => i.Selected)"
+    @bind-Value = "regionSelected"/>
+
+@code {
+
+
+    string? regionSelected; 
+    static List<Option<string>>? regions { get; set; } = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        foreach (int region in Enum.GetValues(typeof(DeliveryRegion)))
+        {
+
+            var rrext = Enum.GetName(typeof(DeliveryRegion), region);
+
+            regions.Add(new Option<string>() { Value = region.ToString(), Text = Enum.GetName(typeof(DeliveryRegion), region) });
+        }
+
+        return base.OnInitializedAsync();
+    }
+
+    // private void AddDomain()
+    // {
+        
+
+    //     //var a = resendClient.DomainAddAsync("d",)
+        
+        
+    // }
+
+
+    
+
+    
+
+}
