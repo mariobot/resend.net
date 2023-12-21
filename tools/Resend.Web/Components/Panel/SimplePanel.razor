@@ -1,0 +1,12 @@
+﻿@implements IDialogContentComponent<string>
+
+<FluentDialogBody>
+    <h3>Hello @Content</h3>
+    <p>Message to config token </p>
+    @* <FluentTextField @bind-Value="">Your Token:</FluentTextField> *@
+</FluentDialogBody>
+
+@code {
+    [Parameter]
+    public string Content { get; set; } = default!;
+}
