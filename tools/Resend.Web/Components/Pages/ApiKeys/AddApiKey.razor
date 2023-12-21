@@ -1,0 +1,58 @@
+﻿
+@page "/ApiKey/addapikey"
+
+@attribute [RenderModeInteractiveServer(false)]
+
+@inject IResend resendClient
+
+<h3>AddApiKey</h3>
+
+<FluentButton OnClick="RegisterApiKey">
+    Register Api Key
+</FluentButton>
+
+
+@if (resultApiKeyData is not null)
+{
+    <h2>@resultApiKeyData.Id</h2>
+    <h2>@resultApiKeyData.Token</h2>
+}
+
+<hr />
+
+
+@if (myApiKeyList is not null)
+{
+    @foreach (var apiKey in myApiKeyList)
+    {
+        <p> @apiKey.Name - @apiKey.MomentCreated - @apiKey.Id </p>
+    }
+}
+
+
+
+
+@code {
+    List<ApiKey>? myApiKeyList;
+    ApiKeyData? resultApiKeyData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await resendClient.ApiKeyListAsync();
+
+        if (response.Success)
+        {
+            myApiKeyList = response.Content;
+        }
+    }
+
+    private async Task RegisterApiKey()
+    {
+        var response = await resendClient.ApiKeyCreateAsync("KetTest", null, null);
+
+        if (response.Success)
+        {
+            resultApiKeyData = response.Content;
+        }
+    }
+}

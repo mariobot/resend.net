@@ -7,45 +7,81 @@
 <h3>AddDomain</h3>
 
 
+<FluentTextField @bind-Value="domainName" Pattern="" >
+
+</FluentTextField>
+
 <FluentSelect Items=@regions
     TOption="Option<string>"
-    Multiple=true
+    Multiple=false
     OptionText="@(i => i.Text)"
     OptionValue="@(i => i.Value)"
     OptionSelected="@(i => i.Selected)"
     @bind-Value = "regionSelected"/>
 
+<h3>@regionSelected</h3>
+<h3>@domainName</h3>
+
+<FluentButton IconStart="@(new Icons.Filled.Size24.AddSquare())" OnClick="RegisterDomain">
+    Add Domain
+</FluentButton>
+
+<hr />
+
+@if (resultaDomain is not null)
+{
+    <h3>@resultaDomain.Name</h3>   
+    <h3>@resultaDomain.MomentCreated</h3>
+    <h3>@resultaDomain.Status</h3>
+    @foreach (var record in resultaDomain.Records)
+    {
+        <p>@record.Name - @record.Status - @record.Value - @record.TimeToLive</p> 
+    }
+}
+
+<hr />
+
+@if (myDomains is not null)
+{
+    <FluentDataGrid Items="@myDomains">
+        <PropertyColumn Property="@(d => d.Name)" Sortable="true" />
+        <PropertyColumn Property="@(d => d.Status)" Sortable="true" />
+        <PropertyColumn Property="@(d => d.Region)" Sortable="true" />
+        <PropertyColumn Property="@(d => d.MomentCreated)" Sortable="true" />
+    </FluentDataGrid>
+}
+
 @code {
 
-
-    string? regionSelected; 
+    string? regionSelected;
+    string? domainName;
     static List<Option<string>>? regions { get; set; } = new();
+    Domain? resultaDomain;
+    IQueryable<Domain>? myDomains;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         foreach (int region in Enum.GetValues(typeof(DeliveryRegion)))
         {
-
-            var rrext = Enum.GetName(typeof(DeliveryRegion), region);
-
-            regions.Add(new Option<string>() { Value = region.ToString(), Text = Enum.GetName(typeof(DeliveryRegion), region) });
+            regions.Add(new Option<string>() { Value =  region.ToString(), Text = Enum.GetName(typeof(DeliveryRegion), region) });
         }
 
-        return base.OnInitializedAsync();
+        var result = await resendClient.DomainListAsync();
+
+        if (result.Success)
+        {
+            myDomains = result.Content.AsQueryable();
+        }
     }
 
-    // private void AddDomain()
-    // {
-        
+    private async Task RegisterDomain()
+    {
 
-    //     //var a = resendClient.DomainAddAsync("d",)
-        
-        
-    // }
+        var response = await resendClient.DomainAddAsync(domainName, (DeliveryRegion)Enum.Parse(typeof(DeliveryRegion), regionSelected));
 
-
-    
-
-    
-
+        if (response.Success)
+        {
+            var ss = response.Content;
+        }
+    }
 }
