@@ -1,10 +1,14 @@
 ﻿@inherits LayoutComponentBase
 <FluentLayout>
     <FluentHeader>
-        Resend.Web
+        <h1>Resend-net Web with Blazor</h1>
+        <Resend.Web.Components.Panel.ConfigPanel></Resend.Web.Components.Panel.ConfigPanel>
     </FluentHeader>
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
         <NavMenu />
+
+        <FluentDialogProvider @rendermode="RenderMode.InteractiveServer"></FluentDialogProvider>
+        
         <FluentBodyContent>
             <div class="content">
                 @Body
