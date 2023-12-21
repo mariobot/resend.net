@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\ApiKeys\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Resend\Resend.csproj" />
   </ItemGroup>
 </Project>
