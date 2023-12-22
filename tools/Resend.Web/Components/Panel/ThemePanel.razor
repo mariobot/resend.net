@@ -1,0 +1,24 @@
+﻿@inject IDialogService DialogService
+@attribute [RenderModeInteractiveServer(false)]
+
+<FluentButton @onclick="@OpenPanelAsync" Appearance="Appearance.Accent">
+    Config Theme Colors
+</FluentButton>
+
+@code {
+    private IDialogReference? _dialog;
+    object obj = "hola";
+
+    private async Task OpenPanelAsync()
+    {
+        _dialog = await DialogService.ShowPanelAsync<ColorPanel>(obj, new DialogParameters<object>()
+            {
+                Content = "Select Theme Color",
+                Alignment = HorizontalAlignment.Right,
+                Title = "Configuration",
+                PrimaryAction = "Yes",
+                SecondaryAction = "No",
+            });
+        DialogResult result = await _dialog.Result;
+    }
+}

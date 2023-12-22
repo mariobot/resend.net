@@ -1,0 +1,58 @@
+﻿@implements IDialogContentComponent<string>
+@attribute [RenderModeInteractiveServer(false)]
+
+
+<!--OnLoaded="@OnLoaded"-->
+<FluentDesignTheme @bind-Mode="@Mode"
+                   OfficeColor="@OfficeColor"
+                   OfficeColorChanged="@(e => { OfficeColor = e ?? OfficeColor.Default; StateHasChanged(); })"
+                   OnLuminanceChanged="@OnLuminanceChanged"
+                   StorageName="theme" />
+
+<FluentDialogBody>
+    <FluentGrid>
+        <FluentGridItem>
+            <FluentSelect Label="Theme"
+                          Items="@(Enum.GetValues<DesignThemeModes>())"
+                          @bind-SelectedOption="@Mode" />
+        </FluentGridItem>
+
+        <FluentGridItem>
+            <FluentSelect Label="Color"
+                          Items="@(Enum.GetValues<OfficeColor>())"
+                          Height="200px"
+                          @bind-SelectedOption="@OfficeColor">
+                <OptionTemplate>
+                    <FluentStack>
+                        <FluentIcon Value="@(new Icons.Filled.Size20.RectangleLandscape())"
+                                    Color="Color.Custom"
+                                    CustomColor="@context.ToAttributeValue()" />
+                        <FluentLabel>@context</FluentLabel>
+                        </FluentStack>
+                    </OptionTemplate>
+                </FluentSelect>
+            </FluentGridItem>
+        </FluentGrid>
+
+
+</FluentDialogBody>
+
+    @code {
+    public DesignThemeModes Mode { get; set; }
+
+    public OfficeColor OfficeColor { get; set; }
+
+    [Parameter]
+    public string Content { get; set; } = default!;
+
+    // void OnLoaded(LoadedEventArgs e)
+    // {
+    //     DemoLogger.WriteLine($"Loaded: {(e.Mode == DesignThemeModes.System ? "System" : "")} {(e.IsDark ? "Dark" : "Light")}");
+    // }
+
+    void OnLuminanceChanged(LuminanceChangedEventArgs e)
+    {
+        // e.Mode == DesignThemeModes.System ? "System" : "";
+        // e.IsDark ? "Dark" : "Light";
+    }
+}
