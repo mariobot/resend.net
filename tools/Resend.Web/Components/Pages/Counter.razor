@@ -1,5 +1,6 @@
 ﻿@page "/counter"
 @rendermode InteractiveServer
+@inject IResend resendClient
 
 <PageTitle>Counter</PageTitle>
 
@@ -9,11 +10,17 @@
 
 <FluentButton Appearance="Appearance.Accent" @onclick="IncrementCount">Click me</FluentButton>
 
-@code {
+    @code {
     private int currentCount = 0;
+    private IResend resend;
+
+    public Counter(IResend resend)
+    {
+        
+    }
 
     private void IncrementCount()
     {
-        currentCount++;
+
     }
 }
