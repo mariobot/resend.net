@@ -5,7 +5,7 @@ using Resend.ApiServer;
 namespace Resend.Tests;
 
 /// <summary />
-public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
+public partial class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
     private readonly IResend _resend;
@@ -21,7 +21,7 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
         var opt = Options.Create( new ResendClientOptions()
         {
             ApiUrl = http.BaseAddress!.ToString(),
-        } ) ;
+        } );
 
         _resend = new ResendClient( opt, http );
     }
@@ -41,6 +41,7 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
 
         Assert.NotNull( resp );
         Assert.True( resp.Success );
+        Assert.NotEqual( Guid.Empty, resp.Content );
     }
 
 
@@ -64,6 +65,26 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
 
     /// <summary />
     [Fact]
+    public async Task EmailBatch()
+    {
+        var email = new EmailMessage();
+        email.Subject = "Unit testing";
+        email.From = "from@example.com";
+        email.To = "to@example.com";
+        email.HtmlBody = "From unit test!";
+
+        var list = new List<EmailMessage>() { email };
+
+        var resp = await _resend.EmailBatchAsync( list );
+
+        Assert.NotNull( resp );
+        Assert.True( resp.Success );
+        Assert.Single( resp.Content );
+    }
+
+
+    /// <summary />
+    [Fact]
     public async Task DomainList()
     {
         var resp = await _resend.DomainListAsync();
@@ -79,6 +100,7 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
         var resp = await _resend.DomainAddAsync( "example.com", DeliveryRegion.UsEast1 );
 
         Assert.NotNull( resp );
+        Assert.NotEqual( Guid.Empty, resp.Content.Id );
     }
 
 
@@ -87,6 +109,20 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task DomainDelete()
     {
         var resp = await _resend.DomainDeleteAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary />
+    [Fact]
+    public async Task DomainUpdate()
+    {
+        var resp = await _resend.DomainUpdateAsync( Guid.NewGuid(), new DomainUpdateData()
+        {
+            TrackClicks = true,
+            TrackOpen = true,
+        } );
 
         Assert.NotNull( resp );
     }
@@ -109,6 +145,7 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
         var resp = await _resend.DomainRetrieveAsync( Guid.NewGuid() );
 
         Assert.NotNull( resp );
+        Assert.NotEqual( Guid.Empty, resp.Content.Id );
     }
 
 
@@ -129,6 +166,7 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
         var resp = await _resend.ApiKeyCreateAsync( "resend-me", Permission.FullAccess );
 
         Assert.NotNull( resp );
+        Assert.NotEqual( Guid.Empty, resp.Content.Id );
     }
 
 
@@ -137,6 +175,114 @@ public class ResendClientTests : IClassFixture<WebApplicationFactory<Program>>
     public async Task ApiKeyDelete()
     {
         var resp = await _resend.ApiKeyDelete( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task AudienceCreate()
+    {
+        var resp = await _resend.AudienceAddAsync( "audience-test" );
+
+        Assert.NotNull( resp );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task AudienceRetrieve()
+    {
+        var resp = await _resend.AudienceRetrieveAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task AudienceList()
+    {
+        var resp = await _resend.AudienceListAsync();
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task AudienceDelete()
+    {
+        var resp = await _resend.AudienceDeleteAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task ContactCreate()
+    {
+        var req = new ContactData()
+        {
+            Email = "test@example.com",
+            FirstName = "Bob",
+            LastName = "Test",
+            IsUnsubscribed = true,
+        };
+
+        var resp = await _resend.ContactAddAsync( Guid.NewGuid(), req );
+
+        Assert.NotNull( resp );
+        Assert.NotEqual( Guid.Empty, resp.Content );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task ContactRetrieve()
+    {
+        var resp = await _resend.ContactRetrieveAsync( Guid.NewGuid(), Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task ContactUpdate()
+    {
+        var req = new ContactData()
+        {
+            Email = "test@email.com",
+            FirstName = "Carl",
+            LastName = "Test",
+            IsUnsubscribed = true,
+        };
+
+        var resp = await _resend.ContactUpdateAsync( Guid.NewGuid(), Guid.NewGuid(), req );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task ContactList()
+    {
+        var resp = await _resend.ContactListAsync( Guid.NewGuid() );
+
+        Assert.NotNull( resp );
+    }
+
+
+    /// <summary/>
+    [Fact]
+    public async Task ContactDelete()
+    {
+        var resp = await _resend.ContactDeleteAsync( Guid.NewGuid(), Guid.NewGuid() );
 
         Assert.NotNull( resp );
     }
