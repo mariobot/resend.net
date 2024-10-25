@@ -1,6 +1,7 @@
 ﻿@page "/Domains/adddomain"
 
-@attribute [RenderModeInteractiveServer(false)]
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
 
 @inject IResend resendClient
 

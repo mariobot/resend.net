@@ -1,7 +1,8 @@
 ﻿@page "/Email/checkemail/{guidEmail:guid}"
 @inject IResend resendClient
 
-@attribute [RenderModeInteractiveServer(false)]
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
 
 <h3>CheckEmail</h3>
 

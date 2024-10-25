@@ -1,6 +1,7 @@
 ﻿@page "/Domains/checkdomains"
 
-@attribute [RenderModeInteractiveServer(false)]
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
 
 @inject IResend resendClient
 
@@ -11,6 +12,7 @@
 
     private void Link()
     {
+        //resendClient.EmailRetrieveAsync(Guid, new CancellationToken())
         
         
     

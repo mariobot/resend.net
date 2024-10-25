@@ -1,9 +1,10 @@
 ﻿@page "/email/sendemail"
 
-@inject IResend resendClient
+@inject IResend resendClient 
 @inject NavigationManager navigationManager
 
-@attribute [RenderModeInteractiveServer(false)]
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
 
 <h3>SendEmail</h3>
 
@@ -11,7 +12,7 @@
     Send Test Email
 </FluentButton>
 
-<FluentButton @onclick="navToInfo" Disabled="disableLinkButton" Id="btnDetails" >
+<FluentButton @onclick="navToInfo" Id="btnDetails" >
     Get Email Info 
 </FluentButton>
 
