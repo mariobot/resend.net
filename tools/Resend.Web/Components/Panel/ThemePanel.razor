@@ -1,5 +1,5 @@
 ﻿@inject IDialogService DialogService
-@attribute [RenderModeInteractiveServer(false)]
+@attribute [StreamRendering(true)]
 
 <FluentButton @onclick="@OpenPanelAsync" Appearance="Appearance.Accent">
     Config Theme Colors
